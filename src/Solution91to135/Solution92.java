@@ -3,18 +3,22 @@ package Solution91to135;
 import solution1to45.Solution2;
 
 //´ýÐø
+
+
 public class Solution92 {
-    public class ListNode {
-      int val;
-      ListNode next;
-      ListNode(int x) { val = x; }
-  }
+
+    public static class ListNode {
+        int val;
+        ListNode next;
+        ListNode(int x) { val = x; }
+    }
+
     public ListNode reverseBetween(ListNode head, int m, int n) {
         if(head == null || head.next == null || m == n) return head;
         ListNode startPre = null;
         ListNode start = head;
-        ListNode endNext = head;
-        ListNode end = null;
+        ListNode endNext = null;
+        ListNode end = head;
         ListNode pre = null;
         ListNode next = null;
         for(int i = 1; i <= n; ++i){
@@ -35,13 +39,29 @@ public class Solution92 {
                 pre = next;
                 next = temp;
                 if(i == n - 1){
-                    end = next;
+                    end = pre;
                     endNext = temp;
                 }
             }
         }
-        startPre.next = end;
+        if(startPre != null) startPre.next = end;
         start.next = endNext;
-        return head;
+        if(m == 1) return end;
+        else return head;
+    }
+
+    public static void main(String[] args){
+        Solution92 s = new Solution92();
+        ListNode l1 = new ListNode(1);
+        ListNode l2 = new ListNode(2);
+        ListNode l3 = new ListNode(3);
+        ListNode l4 = new ListNode(4);
+        ListNode l5 = new ListNode(5);
+//        l1.next = l2;
+//        l2.next = l3;
+//        l3.next = l4;
+//        l4.next = l5;
+        l3.next = l5;
+        s.reverseBetween(l3, 1, 2);
     }
 }
