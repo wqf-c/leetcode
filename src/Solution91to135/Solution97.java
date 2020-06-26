@@ -5,6 +5,26 @@ import java.util.Map;
 
 public class Solution97 {
 
+    //动态规划
+    public boolean isInterleave1(String s1, String s2, String s3) {
+        if(s1.length() + s2.length() != s3.length()) return false;
+        boolean[][] vec = new boolean[s1.length() + 1][s2.length() + 1];
+        vec[0][0] = true;
+        for(int i = 1; i <= s1.length(); ++i){
+            vec[i][0] = s1.substring(0, i).equals(s3.substring(0, i));
+        }
+        for(int j = 1; j <= s2.length(); ++j){
+            vec[0][j] = s2.substring(0, j).equals(s3.substring(0, j));
+        }
+        for(int i = 1; i <= s1.length(); ++i){
+            for(int j = 1; j <= s2.length(); ++j){
+                vec[i][j] = ((vec[i - 1][j] && s1.charAt(i - 1) == s3.charAt(i + j - 1))
+                        | (vec[i][j - 1] && s2.charAt(j - 1) == s3.charAt(i + j - 1)));
+            }
+        }
+        return vec[s1.length()][s2.length()];
+    }
+
     //todo 优化
     public boolean isInterleave(String s1, String s2, String s3) {
         if(s3.length() != s1.length() + s2.length()) return false;
@@ -48,6 +68,6 @@ public class Solution97 {
 
     public static void main(String[] argv){
         Solution97 s = new Solution97();
-        System.out.println(s.isInterleave("aabcc", "dbbca", "aadbbcbcac"));
+        System.out.println(s.isInterleave1("", "b", "b"));
     }
 }
