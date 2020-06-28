@@ -1,34 +1,39 @@
 ```c++
-struct test
-{
-	char a;
-	int b;
-	short c;
-};
-
-struct test2
-{
-	char a;
-	short b;
-	int c;
-};
+int factorial(int n) {
+	int num = 1;
+	int i = 0;
+	Sleep(1000);
+	while (n > 0)
+	{
+		num *= n;
+		n--;
+	}
+	//Sleep(4000);
+	return num;
+}
 
 int main() {
-	test t1;
-	test2 t2;
-	printf("%d %d\n", sizeof(t1), sizeof(t2));
-	printf("%d  %d  %d\n", &t1.a, &t1.b, &t1.c);
-	printf("%d  %d  %d\n", &t2.a, &t2.b, &t2.c);
-	system("pause");
+	future<int> fu = std::async(std::launch::async, factorial, 4);
+	int i = 0;
+	Sleep(500);
+	std::chrono::milliseconds span(100);
+	while (fu.wait_for(span) != std::future_status::ready)
+		std::cout << ".";
+	std::cout << std::endl;
+	std::cout << fu.get() << std::endl;
+	
+	return 0;
 }
 ```
-上面的代码运行结果：
-两个结构体test和test2有都有一个char类型，一个short类型，一个int类型的变量，在我的电脑上
-char类型占1个字节，short类型占2个字节，int类型占4个字节，打印出来的大小是t1占12个字节，
-t2占8个字节，这是因为结构体大小遵循两条规律：
-```c++
-1，每个结构体成员的起始地址为该成员大小的整数倍，即int型成员的其实地址只能为0、4、8等
 
-2，结构体的大小为其中最大成员大小的整数倍
+c++11提供了异步接口std::async，通过这个异步接口可以很方便的获取线程函数的执行结果。std::async会自动创建一个线程去调用线程函数，
+它返回一个std::future，这个future中存储了线程函数返回的结果，当我们需要线程函数的结果时，直接从future中获取。
+std::async的第一个参数是创建策略，有两种策略，默认的策略是立即创建线程：
+```c++
+std::launch::async：在调用async就开始创建线程。
+std::launch::deferred：延迟加载方式创建线程。调用async时不创建线程，直到调用了future的get或者wait时才调用的入口函数（不创建新线程）。
+launch::async | launch::deferred：可能创建新线程，也可能延迟调用。系统会根据当前的资源情况选择合适的方式。
 ```
-运行结果t1和t2中各个变量的地址可以验证这两条规律。
+主线程既可使用std::future::get获取结果，如果调用过程中，任务尚未完成，则主线程阻塞至任务完成。
+主线程也可使用std::future::wait_for等待结果返回，wait_for可设置超时时间，如果在超时时间之内任务完成，则返回std::future_status::ready状态；如果在超时时间之内任务尚未完成，则返回std::future_status::timeout状态。
+需要注意的是future的get方法只能调用一次，否者会抛出异常。
