@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Solution119 {
 
+    //妙啊
     public List<Integer> getRow(int rowIndex) {
         Integer[] dp = new Integer[rowIndex + 1];
         Arrays.fill(dp,1);
