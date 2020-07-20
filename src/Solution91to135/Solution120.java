@@ -13,7 +13,6 @@ public class Solution120 {
         for(int i = 1; i < size; ++i){
             for(int j = 0; j <= i; ++j){
                 if(j == 0){
-
                     dp[i][j] = triangle.get(i).get(j) + dp[i - 1][j];
                 }else if(j == i){
                     dp[i][j] = triangle.get(i).get(j) + dp[i - 1][j - 1];
@@ -28,6 +27,26 @@ public class Solution120 {
         }
         return min;
     }
+
+    //只用了O(n)的空间
+    public int minimumTotal1(List<List<Integer>> triangle) {
+        int n = triangle.size();
+        int[] f = new int[n];
+        f[0] = triangle.get(0).get(0);
+        for (int i = 1; i < n; ++i) {
+            f[i] = f[i - 1] + triangle.get(i).get(i);
+            for (int j = i - 1; j > 0; --j) {
+                f[j] = Math.min(f[j - 1], f[j]) + triangle.get(i).get(j);
+            }
+            f[0] += triangle.get(i).get(0);
+        }
+        int minTotal = f[0];
+        for (int i = 1; i < n; ++i) {
+            minTotal = Math.min(minTotal, f[i]);
+        }
+        return minTotal;
+    }
+
 
     public static void main(String[] args){
         Solution120 s120 = new Solution120();
