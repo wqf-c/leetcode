@@ -8,7 +8,7 @@ package Graph;
 public class Solution685 {
 
     public int[] findRedundantDirectedConnection(int[][] edges) {
-
+        return null;
     }
 
 }
