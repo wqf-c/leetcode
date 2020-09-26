@@ -72,6 +72,51 @@ public class Solution802 {
         return ans;
     }
 
+    boolean[] visited = null;
+    List<Integer> res = null;
+    boolean[] save = null;
+
+    public List<Integer> eventualSafeNodes_2(int[][] graph){
+        visited = new boolean[graph.length];
+        res = new ArrayList<>();
+        save = new boolean[graph.length];
+        while (true){
+            int nextIndex = -1;
+            for(int i = 0; i < visited.length; ++i){
+                if(!visited[i]){
+                    nextIndex = i;
+                    break;
+                }
+            }
+            if(nextIndex == -1) break;
+            else{
+                dfs_2(nextIndex, graph);
+            }
+        }
+        for(int i = 0; i < save.length; ++i){
+            if(save[i]) res.add(i);
+        }
+        return res;
+    }
+
+    boolean dfs_2(int node, int[][] graph){
+        visited[node] = true;
+        if(graph[node].length == 0){
+            save[node] = true;
+            return true;
+        }
+        boolean flag = true;
+        for(int nei : graph[node]){
+            if(save[nei]) continue;
+            if(visited[nei]){
+                flag = false;
+                continue;
+            }
+            if(!dfs_2(nei, graph)) flag = false;
+        }
+        if(flag) save[node] = true;
+        return flag;
+    }
 
     public static void main(String[] args){
         Solution802 s = new Solution802();
