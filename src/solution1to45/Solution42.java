@@ -47,7 +47,7 @@ public class Solution42 {
     return result;
   }
 
-  //c++双指针
+  //c++双指针  理解见官方·解答第二条评论
 //  int trap(vector<int>& height)
 //  {
 //    int left = 0, right = height.size() - 1;
