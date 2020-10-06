@@ -22,9 +22,10 @@ public class Solution56 {
 //97.53%
 //    的用户
     public static int[][] merge(int[][] intervals) {
-        if(intervals == null || intervals.length == 1) return intervals;
+        if(intervals == null || intervals.length == 1 || intervals.length == 0) return intervals;
         quickSort(0, intervals.length - 1, intervals);
-        List<List<Integer>> lists = new ArrayList<>();
+        int[][] rst1 = new int[intervals.length][2];
+        int index = 0;
         int[] temp = new int[2];
         temp[0] = intervals[0][0];
         temp[1] = intervals[0][1];
@@ -33,9 +34,9 @@ public class Solution56 {
                 mergeTwo(temp, intervals[i], temp);
             }else{
                 List<Integer> list = new ArrayList<>();
-                list.add(temp[0]);
-                list.add(temp[1]);
-                lists.add(list);
+                rst1[index][0] = temp[0];
+                rst1[index][1] = temp[1];
+                index++;
                 temp[0] = intervals[i][0];
                 temp[1] = intervals[i][1];
             }
@@ -43,11 +44,12 @@ public class Solution56 {
         List<Integer> list1 = new ArrayList<>();
         list1.add(temp[0]);
         list1.add(temp[1]);
-        lists.add(list1);
-        int[][] rst = new int[lists.size()][2];
-        for(int i = 0; i < lists.size(); ++i){
-            rst[i][0] = lists.get(i).get(0);
-            rst[i][1] = lists.get(i).get(1);
+        rst1[index][0] = temp[0];
+        rst1[index][1] = temp[1];
+        int[][] rst = new int[index + 1][2];
+        for(int i = 0; i <= index; ++i){
+            rst[i][0] = rst1[i][0];
+            rst[i][1] = rst1[i][1];
         }
         return rst;
     }
