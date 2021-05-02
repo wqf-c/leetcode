@@ -1,23 +1,22 @@
-package DP;
-
-import solution1to45.Solution30;
+package Hot100;
 
 /**
  * @author wqf
- * @date 2020/10/25 19:42
+ * @date 2021/4/18 12:18
  * @Email:284660487@qq.com
  */
 public class Solution300 {
-//[1,3,6,7,9,4,10,5,6]
+
     public int lengthOfLIS(int[] nums) {
         if(nums == null || nums.length == 0) return 0;
-        int max = 0;
+        if(nums.length == 1) return 1;
+        int max = 1;
         int[] dp = new int[nums.length];
-        for(int i = 0; i < nums.length; ++i){
-            int cur = nums[i];
+        dp[0] = 1;
+        for(int i = 1; i < nums.length; ++i){
             int m = 0;
             for(int j = i - 1; j >= 0; --j){
-                if(nums[j] < cur && dp[j] > m){
+                if(nums[j] < nums[i] && m < dp[j]){
                     m = dp[j];
                 }
             }
@@ -56,13 +55,4 @@ public class Solution300 {
         return len;
     }
 
-//    作者：LeetCode-Solution
-//    链接：https://leetcode-cn.com/problems/longest-increasing-subsequence/solution/zui-chang-shang-sheng-zi-xu-lie-by-leetcode-soluti/
-//    来源：力扣（LeetCode）
-//    著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-    public static void main(String[] args){
-        Solution300 solution300 = new Solution300();
-        solution300.lengthOfLIS(new int[]{1,3,6,7,9,4,10,5,6});
-    }
 }
